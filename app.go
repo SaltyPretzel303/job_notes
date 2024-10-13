@@ -84,6 +84,9 @@ func parseShortDate(s string, format string) string {
 
 // TODO return err as well
 func ParseAppData(tokens []string) *ApplicationData {
+
+	fmt.Printf("Parsing: %v\n", strings.Join(tokens, " <> "))
+
 	company := tokens[0]
 	role := tokens[1]
 	llocation := tokens[2]
@@ -98,7 +101,7 @@ func ParseAppData(tokens []string) *ApplicationData {
 		Company:         company,
 		Role:            role,
 		Location:        location,
-		WorkType:        tokens[2],
+		WorkType:        formatWorkType(location, isRemote, isHybrid),
 		IsHybrid:        isHybrid,
 		IsRemote:        isRemote,
 		ApplicationDate: apDate,
@@ -142,8 +145,7 @@ func main() {
 		if err != nil || strings.ToUpper(input) != "Y" {
 			fmt.Println("Aborting.")
 		} else {
-			fmt.Println("Will save the application.")
-			fmt.Println(newApp.AsJson())
+			// fmt.Println(newApp.AsJson())
 			db.Save(newApp)
 		}
 	} else if getFields.Happened() {
@@ -184,8 +186,6 @@ func main() {
 
 			dataLine := ParseAppData(strings.Split(line, ","))
 			data = append(data, *dataLine)
-
-			fmt.Printf("%+v \n", data)
 		}
 
 		if len(data) > 0 {

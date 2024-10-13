@@ -94,7 +94,7 @@ func buildInsertQuery(ap *ApplicationData) string {
 }
 
 func (db *SqLiteDb) Save(ap *ApplicationData) {
-	fmt.Println("Saving new application in SqlLiteDatabase.")
+	fmt.Printf("Saving: %+v\n", ap)
 
 	insertQuery := buildInsertQuery(ap)
 	_, err := db.conn.Exec(insertQuery)
@@ -103,8 +103,6 @@ func (db *SqLiteDb) Save(ap *ApplicationData) {
 		fmt.Println("Failed to exec insert query: ", insertQuery, " err: ", err)
 		return
 	}
-
-	fmt.Println("Application saved.")
 }
 
 func buildSelectSearchQuery(data *SearchData) string {

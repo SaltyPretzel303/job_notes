@@ -99,26 +99,26 @@ func (cmd *AddCmd) IsRemote() bool {
 	return (*cmd.RemoteFlag || *cmd.WorkTypeArg == "remote")
 }
 
-func (cmd *AddCmd) GetWorkType() string {
-	EMPTY_VAL := "      " // 6 spaces -> len(remote|hybrid|onsite) == 6 :)
+// func (cmd *AddCmd) GetWorkType() string {
+// 	EMPTY_VAL := "      " // 6 spaces -> len(remote|hybrid|onsite) == 6 )
 
-	var remoteValue = EMPTY_VAL
-	if cmd.IsRemote() {
-		remoteValue = "remote"
-	}
+// 	var remoteValue = EMPTY_VAL
+// 	if cmd.IsRemote() {
+// 		remoteValue = "remote"
+// 	}
 
-	var hybridValue = EMPTY_VAL
-	if cmd.IsHybrid() {
-		hybridValue = "hybrid"
-	}
+// 	var hybridValue = EMPTY_VAL
+// 	if cmd.IsHybrid() {
+// 		hybridValue = "hybrid"
+// 	}
 
-	var onSiteValue = EMPTY_VAL
-	if cmd.IsHybrid() || (!cmd.IsHybrid() && !cmd.IsRemote()) {
-		onSiteValue = "onsite"
-	}
+// 	var onSiteValue = EMPTY_VAL
+// 	if cmd.IsHybrid() || (!cmd.IsHybrid() && !cmd.IsRemote()) {
+// 		onSiteValue = "onsite"
+// 	}
 
-	return fmt.Sprintf("%v/%v/%v", onSiteValue, hybridValue, remoteValue)
-}
+// 	return fmt.Sprintf("%v/%v/%v", onSiteValue, hybridValue, remoteValue)
+// }
 
 func (cmd *AddCmd) GetApplicationDate(format string) (time.Time, error) {
 	if *cmd.ApplicationDateArg != "" {
@@ -164,6 +164,29 @@ func (cmd *AddCmd) GetComment() string {
 	}
 }
 
+func formatWorkType(location string, isRemote, isHybrid bool) string {
+	EMPTY_VAL := "      " // 6 spaces -> len(remote|hybrid|onsite) == 6 )
+
+	var remoteValue = EMPTY_VAL
+	if isRemote {
+		remoteValue = "remote"
+	}
+
+	var hybridValue = EMPTY_VAL
+	if isHybrid {
+		hybridValue = "hybrid"
+	}
+
+	var onSiteValue = EMPTY_VAL
+	if isHybrid || (!isHybrid && !isRemote) {
+		if location != "" {
+			onSiteValue = location
+		}
+	}
+
+	return fmt.Sprintf("%v/%v/%v", onSiteValue, hybridValue, remoteValue)
+}
+
 func (cmd *AddCmd) AsApplication(dateFormat string) *ApplicationData {
 	appData := ApplicationData{}
 
@@ -175,7 +198,7 @@ func (cmd *AddCmd) AsApplication(dateFormat string) *ApplicationData {
 
 	appData.Location = cmd.GetLocation()
 
-	appData.WorkType = cmd.GetWorkType()
+	appData.WorkType = formatWorkType(cmd.GetLocation(), cmd.IsRemote(), cmd.IsHybrid())
 
 	appData.IsHybrid = cmd.IsHybrid()
 	appData.IsRemote = cmd.IsRemote()
