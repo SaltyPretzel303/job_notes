@@ -1,0 +1,21 @@
+name: Run fetch.py on Commit
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+  run-fetch:
+    runs-on: debian-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Run fetch.py
+      run: python fetch.py
