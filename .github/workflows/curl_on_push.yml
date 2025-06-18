@@ -1,0 +1,13 @@
+name: Run fetch.py on Commit
+
+on:
+  push:
+    branches: [ main, master ]
+    
+jobs:
+  run-fetch:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - run: curl curl --header "Authorization: Token "$VH_API_TOKEN https://app.valohai.com/api/v0/projects
