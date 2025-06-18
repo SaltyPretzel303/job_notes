@@ -7,7 +7,8 @@ on:
 jobs:
   run-fetch:
     runs-on: ubuntu-latest
-    
+    env: 
+      VH_API_TOKEN: ${{ secrets.VH_API_TOKEN }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
