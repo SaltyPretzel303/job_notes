@@ -11,5 +11,5 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - run: | 
-        /bin/bash curl --header "authorization: token "$VH_API_TOKEN https://app.valohai.com/api/v0/projects 
+        curl --header "authorization: token "$VH_API_TOKEN https://app.valohai.com/api/v0/projects 
         echo "Done ?"
